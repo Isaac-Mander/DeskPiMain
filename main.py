@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     #Setting up GPIO pins
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setmode(GPIO.BCM)
+    ##GPIO.setmode(GPIO.BCM)
 
     #GPIO CONST
     #Under desk rgb
