@@ -69,10 +69,10 @@ if __name__ == '__main__':
             #RGB is switch 1 of box
             if ard_info == "1H":
                 #RGB ON
-                pass
+                print("RGB ON")
             elif ard_info == "1L":
                 #RGB OFF
-                pass
+                print("RGB OFF")
 
 
 
