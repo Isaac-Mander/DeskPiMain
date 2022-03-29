@@ -30,7 +30,7 @@ if __name__ == '__main__':
     #Adafruit IO setup
     from Adafruit_IO import *
     #Replace with your adafruit username and key
-    aio = Client("Greenbird2026","aio_VsVV394YmE4jT6HRfYcUOXJjkXNY")#Client(adv.username,adv.key)
+    aio = Client(adv.username,adv.key)#Client(adv.username,adv.key)
 
     #Query variables
     QUERY_DELAY = 10 #timer to stop over pinging server and throttling bandwidth

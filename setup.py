@@ -12,17 +12,12 @@ def install(package):
     except:
         print("Error installing",package)
 
-#Get directory of files to set up
-print("Project Directory (absolute only)")
-print(r"e.g. C:\Program Files\\")
-direct = input("> ")
-
 #Install Adafruit
 install("adafruit-io")
 
 #Add important adafruit files
 try:
-    ada_var = open(direct+"adafruit_var.py", "x")
+    ada_var = open("adafruit_var.py", "x")
 except FileExistsError:
     print("adafruit_var already exists")
 
