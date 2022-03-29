@@ -30,13 +30,17 @@ if __name__ == '__main__':
     #Adafruit IO setup
     from Adafruit_IO import *
     #Replace with your adafruit username and key
-    aio = Client(adv.username,adv.key)
+    aio = Client("Greenbird2026","aio_VsVV394YmE4jT6HRfYcUOXJjkXNY")#Client(adv.username,adv.key)
+
+    #Query variables
+    QUERY_DELAY = 10 #timer to stop over pinging server and throttling bandwidth
+    query_timer = QUERY_DELAY
 
     #Setting up feeds
     #This will create feeds automatically if not present
 
     #Under Desk RGB
-    under_desk_rgb_feed = adaf.feed_setup("db-rgb")
+    under_desk_rgb_feed = adaf.feed_setup("dp-rgb")
 
     print("Adafruit IO set up")
 
@@ -46,14 +50,22 @@ if __name__ == '__main__':
     ard_box.reset_input_buffer()
 
     #Setting up GPIO pins
-    GPIO.setmode(GPIO.BOARD)
-    ##GPIO.setmode(GPIO.BCM)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
 
     #GPIO CONST
     #Under desk rgb
-    UD_RGB_R_RELAY = 0
-    UD_RGB_G_RELAY = 0
-    UD_RGB_B_RELAY = 0
+    UD_RGB_R_RELAY = 12
+    UD_RGB_G_RELAY = 16
+    UD_RGB_B_RELAY = 20
+    ud_rgb_state = [0,0,0,False]
+
+    GPIO.setup(UD_RGB_R_RELAY, GPIO.OUT)
+    GPIO.setup(UD_RGB_G_RELAY, GPIO.OUT)
+    GPIO.setup(UD_RGB_B_RELAY, GPIO.OUT)
+    GPIO.output(UD_RGB_R_RELAY, GPIO.HIGH)
+    GPIO.output(UD_RGB_G_RELAY, GPIO.HIGH)
+    GPIO.output(UD_RGB_B_RELAY, GPIO.HIGH)
 
     #Main Loop
     running = True
@@ -63,18 +75,39 @@ if __name__ == '__main__':
         #Ardunio Box
         if ard_box.in_waiting > 0:
             ard_info = ard_box.readline().decode('utf-8').rstrip()
+            print(ard_info)
 
             #Arduino Box controls RGB,Music/Sound
 
             #RGB is switch 1 of box
             if ard_info == "1H":
+                ud_rgb_state[3] = True
                 #RGB ON
                 print("RGB ON")
+                GPIO.output(UD_RGB_R_RELAY, ud_rgb_state[0])
+                GPIO.output(UD_RGB_G_RELAY, ud_rgb_state[1])
+                GPIO.output(UD_RGB_B_RELAY, ud_rgb_state[2])
             elif ard_info == "1L":
+                ud_rgb_state[3] = False
                 #RGB OFF
                 print("RGB OFF")
+                GPIO.output(UD_RGB_R_RELAY, GPIO.HIGH)
+                GPIO.output(UD_RGB_G_RELAY, GPIO.HIGH)
+                GPIO.output(UD_RGB_B_RELAY, GPIO.HIGH)
 
 
+        #Update info from adafruit io
+        query_timer += -1
+        if query_timer <= 0:
+            query_timer = QUERY_DELAY
+
+            #Check Under Desk RGB Feed
+            print("Checked")
+            ud_rgb_state[0],ud_rgb_state[1],ud_rgb_state[2] = adaf.check_rgb_feed(under_desk_rgb_feed)
+            if ud_rgb_state[3] == True:
+                GPIO.output(UD_RGB_R_RELAY, ud_rgb_state[0])
+                GPIO.output(UD_RGB_G_RELAY, ud_rgb_state[1])
+                GPIO.output(UD_RGB_B_RELAY, ud_rgb_state[2])
 
 
 
