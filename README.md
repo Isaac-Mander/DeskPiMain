@@ -13,4 +13,4 @@ adafruit_func.py contains a bunch of functions I have made that makes using syst
 
 setup.py will install all libraries and dependancys required to use my code. 
 
-**IN ORDER FOR MY CODE TO WORK YOU MUST EDIT THE LINE aio = Client(adv.username,adv.key) AND REPLACE WITH USERNAME/KEY WITH YOUR ADAFRUIT_IO INFO RESPECTIVLY. If you want to be fancy create a file named adafruit_var.py and place your variables in there and git ignoring it so you don't have any key leaks.** You will want to do this before commiting to this respotory for the aformentioned reason.
+**IN ORDER FOR MY CODE TO WORK YOU MUST EDIT THE LINE aio = Client(adv.username,adv.key) AND REPLACE WITH USERNAME/KEY WITH YOUR ADAFRUIT_IO INFO RESPECTIVLY. If you want to be fancy create a file named adafruit_var.py and place your variables in there and git ignore it so you don't have any key leaks. (key leaks require you to update your key every time you commit your code to github)** You will want to do this before commiting to this respotory for the aformentioned reason.
